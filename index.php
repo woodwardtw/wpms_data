@@ -21,6 +21,7 @@ function wpms_data_load_scripts() {
     $deps = array('jquery');
     $version= '1.0'; 
     $in_footer = true;    
+    wp_enqueue_style( 'wpms-table-css', plugin_dir_url( __FILE__) . 'css/wpms-data-style.css');
     wp_enqueue_script('data-tables-js', '//cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js', $version, $in_footer); 
     wp_enqueue_style( 'data-tables-css', '//cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css');
     wp_enqueue_script('wpms-data-js', plugin_dir_url( __FILE__) . 'js/wpms-data.js', 'data-tables-js', $version, $in_footer); 
@@ -40,8 +41,13 @@ function wpms_data_theme_details(){
       //var_dump($options);
       $url = get_blog_option($blog_id->path, 'siteurl');
       $name = get_blog_option($blog_id->path, 'blogname');
-      $theme = get_blog_option($blog_id->path, 'template');
+      if(get_blog_option($blog_id->path, 'current_theme')){
+               $theme = get_blog_option($blog_id->path, 'current_theme');
+      } else {
+               $theme = get_blog_option($blog_id->path, 'template');
+      }
       $plugins = get_blog_option($blog_id->path, 'active_plugins');
+      $admin = get_blog_option($blog_id->path, 'admin_email');
       $post_count = post_count_zero(get_blog_option($blog_id->path, 'post_count'));
       $page_count = post_count_zero(get_blog_option($blog_id->path, 'wpms_data_pages_count'));
       $the_plugins = '';
@@ -87,7 +93,7 @@ function wpms_data_plugin_namer($array){
          $plugin_data = @get_plugin_data(WP_PLUGIN_DIR . '/' . $plugin);
          if(array_key_exists('Name', $plugin_data)){
             $plugin_name = $plugin_data['Name'];
-            $plugin_names .= "<div class=''>{$plugin_name}*</div>";
+            $plugin_names .= "<div class='plugin-item'>{$plugin_name}*</div>";
          }
 
       }
