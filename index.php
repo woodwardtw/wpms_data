@@ -50,6 +50,7 @@ function wpms_data_theme_details(){
       $admin = get_blog_option($blog_id->path, 'admin_email');
       $post_count = post_count_zero(get_blog_option($blog_id->path, 'post_count'));
       $page_count = post_count_zero(get_blog_option($blog_id->path, 'wpms_data_pages_count'));
+      $last_updated = get_blog_details($blog_id->path)->last_updated;
       $the_plugins = '';
       if($plugins != ''){
          $the_plugins = wpms_data_plugin_namer($plugins);
@@ -60,6 +61,8 @@ function wpms_data_theme_details(){
                      <td>{$the_plugins}</td>
                      <td>{$post_count}</td>
                      <td>{$page_count}</td>
+                     <td>{$last_updated}</td>
+
                </tr>";
    }
    return "<table id='theSites' class='display' style='width:100%''>
@@ -69,13 +72,21 @@ function wpms_data_theme_details(){
                    <th>theme</th>
                    <th>plugins</th>
                    <th>posts</th> 
-                   <th>pages</th>                
+                   <th>pages</th> 
+                   <th>updated</th>               
                </tr>
            </thead>
            <tbody>{$html}</tbody></table>";
 }
 
    add_shortcode('wpms-theme-details', 'wpms_data_theme_details');
+
+
+function taylor_test(){
+   $sites = get_sites();
+   var_dump($sites);
+}
+ add_shortcode('taylor', 'taylor_test');
 
 function post_count_zero($count){
    if ($count < 1 || $count == ''){
